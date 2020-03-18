@@ -14,4 +14,6 @@
     <string name="location_tittle">Please turn on loaction to get your current city</string>
     <string name="location_required">Location Required !</string>
     <string name="try_again">Please try again</string>
+    <string name="enter_location">Please enter your location</string>
+    <string name="new_restaurant">New</string>
 </resources>

@@ -1,8 +1,10 @@
 package com.sujit.zomatoapidemo.ui.home;
 
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.sujit.zomatoapidemo.data.models.Location;
 import com.sujit.zomatoapidemo.data.models.Restaurant;
 import com.sujit.zomatoapidemo.data.remote.APIService;
 import com.sujit.zomatoapidemo.data.source.DataSource;
@@ -25,29 +27,27 @@ public class HomeActivityViewModel extends ViewModel {
     private SingleLiveEvent<List<Restaurant>> resListLiveData;
     private List<Restaurant> restaurants;
     private SingleLiveEvent<Boolean> isError;
+
+    private Location location;
     private int currentPage;
     private int totalResults;
-
-    private SingleLiveEvent<String> queryParams;
 
     @Inject
     public HomeActivityViewModel(APIService apiService) {
         dataSource = new DataSource(apiService);
         resListLiveData = new SingleLiveEvent<>();
-        queryParams = new SingleLiveEvent<>();
         isError = new SingleLiveEvent<>();
         restaurants = new ArrayList<>();
         currentPage = 0;
         totalResults = 0;
-
-        // TODO
-        queryParams.setValue("Dadar");
     }
 
+
     @SuppressLint("CheckResult")
-    public void fetchRestraurantByName() {
-        Log.e(TAG, "fetchRestraurantByName: ");
-        dataSource.getRestraurantsByName(queryParams.getValue(), currentPage)
+    public void fetchRestraurant() {
+        if (location == null || TextUtils.isEmpty(location.getAddress())) return;
+
+        dataSource.getRestraurants(location, currentPage)
                 .subscribe(resource -> {
                     if (resource.isSuccess()) {
                         restaurants.addAll(resource.data.getRestaurants());
@@ -55,21 +55,7 @@ public class HomeActivityViewModel extends ViewModel {
                         currentPage = currentPage + 20;
                         totalResults = resource.data.getResultsFound();
                     } else {
-                        isError.setValue(true);
-                    }
-                });
-    }
-
-    @SuppressLint("CheckResult")
-    public void fetchRestraurantsByLocation(double lat, double lon) {
-        if (currentPage != 0) currentPage = currentPage + 20;
-        dataSource.getRestraurants(lat, lon, currentPage)
-                .subscribe(resource -> {
-                    if (resource.isSuccess()) {
-                        restaurants.addAll(resource.data.getRestaurants());
-                        resListLiveData.setValue(resource.data.getRestaurants());
-                        totalResults = resource.data.getResultsFound();
-                    } else {
+                        if (restaurants.isEmpty()) resListLiveData.setValue(null); // first page
                         isError.setValue(true);
                     }
                 });
@@ -83,22 +69,23 @@ public class HomeActivityViewModel extends ViewModel {
         return restaurants;
     }
 
-
-    public SingleLiveEvent<String> getQueryParams() {
-        return queryParams;
+    public Location getLocation() {
+        return location;
     }
 
-    public void setQueryParams(String queryParams) {
-        this.queryParams.setValue(queryParams);
+    public void setLocation(Location location) {
+        this.location = location;
+        restaurants.clear();
+        currentPage = 0;
+        totalResults = 0;
     }
+
 
     public SingleLiveEvent<Boolean> isError() {
         return isError;
     }
 
     public boolean isLastPage() {
-        Log.e(TAG, "isLastPage: currentPage "+currentPage);
-        Log.i(TAG, "isLastPage: totalResults "+totalResults);
         return restaurants.isEmpty() || totalResults == 0 || totalResults < 20 || totalResults <= currentPage;
     }
 }

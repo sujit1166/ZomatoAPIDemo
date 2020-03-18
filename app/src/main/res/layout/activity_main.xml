@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data class="HomeActivityBinding" />
 
@@ -34,7 +35,7 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:text="Dadar"
+                tools:text="Dadar"
                 android:textAllCaps="true"
                 android:textColor="@color/general_text"
                 android:textSize="@dimen/font_large_14"

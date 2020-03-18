@@ -1,5 +1,7 @@
 package com.sujit.zomatoapidemo.ui.home;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,12 +10,15 @@ import android.widget.Toast;
 import com.sujit.zomatoapidemo.R;
 import com.sujit.zomatoapidemo.data.models.Restaurant;
 import com.sujit.zomatoapidemo.databinding.HomeActivityBinding;
+import com.sujit.zomatoapidemo.ui.location.LocationActivity;
+import com.sujit.zomatoapidemo.utils.AppConstants;
 import com.sujit.zomatoapidemo.utils.RecyclerViewScrollListener;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -31,6 +36,8 @@ public class HomeActivity extends AppCompatActivity {
     private HomeActivityBinding binding;
     private RestaurantAdapter restaurantAdapter;
 
+    private final int GET_LOCATION = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,11 +52,11 @@ public class HomeActivity extends AppCompatActivity {
         restaurantAdapter = new RestaurantAdapter(getApplicationContext());
         binding.rvRestaurant.setAdapter(restaurantAdapter);
         restaurantAdapter.setOnItemClickListener(this::navigateToRestaurantDetailsActivity);
+        binding.rlHeader.setOnClickListener(v -> navigateToLocationActivity());
 
         binding.rvRestaurant.addOnScrollListener(new RecyclerViewScrollListener(binding.rvRestaurant) {
             @Override
             public boolean isLastPage() {
-//                Log.e(TAG, "isLastPage: calling");
                 if (viewModel.isLastPage()) {
                     restaurantAdapter.hideFooter();
                     return true;
@@ -60,7 +67,7 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void loadMore() {
-                viewModel.fetchRestraurantByName();
+                viewModel.fetchRestraurant();
             }
         });
 
@@ -71,14 +78,15 @@ public class HomeActivity extends AppCompatActivity {
          * contains the list data. If so, there is no
          * need to call the api or load data from cache again */
 
-        if (viewModel.getRestaurants().isEmpty()) {
+        hideProgress();
+        if (viewModel.getLocation() == null) {
+            showLocationNeedDialog();
+        } else if (viewModel.getRestaurants().isEmpty()) {
             Log.e(TAG, "initialiseView: first time");
-            hideList();
-            showProgress();
-            viewModel.fetchRestraurantByName();
+            fetchRestraurantsData();
         } else {
             Log.e(TAG, "initialiseView: display old data");
-            hideProgress();
+            binding.tvCurrentLocation.setText(viewModel.getLocation().getAddress());
             showList(viewModel.getRestaurants());
         }
     }
@@ -96,6 +104,16 @@ public class HomeActivity extends AppCompatActivity {
         viewModel.isError().observe(this, aBoolean -> Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show());
 
     }
+
+    private void fetchRestraurantsData() {
+        Log.e(TAG, "fetchRestraurantsData: ");
+        hideList();
+        showProgress();
+        restaurantAdapter.refreshItems();
+        viewModel.fetchRestraurant();
+    }
+
+
 
     private void showProgress() {
         binding.viewLoader.rootView.setVisibility(View.VISIBLE);
@@ -122,8 +140,50 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void navigateToRestaurantDetailsActivity(Restaurant restaurant) {
-//        Intent intent = new Intent(getActivity(), GitRepoDetailsActivity.class);
-//        intent.putExtra(GITREPOENTITY_INTENT, gitRepoEntity);
-//        getActivity().startActivity(intent);
+
+    }
+
+
+    private void showLocationNeedDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.location_required))
+                .setMessage(R.string.location_tittle)
+                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    navigateToLocationActivity();
+                })
+                .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    finish();
+                })
+                .setCancelable(false);
+        builder.create().show();
+    }
+
+    private void navigateToLocationActivity() {
+        Intent intent = new Intent(this, LocationActivity.class);
+        if (viewModel.getLocation() != null) {
+            intent.putExtra(AppConstants.ADDRESS, viewModel.getLocation());
+        }
+        startActivityForResult(intent, GET_LOCATION);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GET_LOCATION) {
+            if (resultCode == RESULT_OK) {
+                if (data != null) {
+                    viewModel.setLocation(data.getParcelableExtra(AppConstants.ADDRESS));
+                    binding.tvCurrentLocation.setText(viewModel.getLocation().getAddress());
+                    Log.e(TAG, "onActivityResult: ");
+                    fetchRestraurantsData();
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                if (viewModel.getLocation() == null) {
+                    showLocationNeedDialog();
+                }
+            }
+        }
     }
 }

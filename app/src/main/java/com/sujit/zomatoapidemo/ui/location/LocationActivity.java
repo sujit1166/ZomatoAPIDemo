@@ -24,6 +24,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.sujit.zomatoapidemo.R;
 import com.sujit.zomatoapidemo.databinding.LocationDetectionActivity;
+import com.sujit.zomatoapidemo.utils.AppConstants;
 
 import java.io.IOException;
 import java.util.List;
@@ -47,16 +48,29 @@ public class LocationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        requiredLocation = new com.sujit.zomatoapidemo.data.models.Location();
         initialiseView();
+        getIntentData();
+
     }
 
 
     private void initialiseView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_location);
         binding.tvAutoDetect.setOnClickListener(view -> getLastLocation());
-        binding.btnOK.setOnClickListener(view -> getLastLocation());
-        binding.btnCancel.setOnClickListener(view -> getLastLocation());
+        binding.btnOK.setOnClickListener(view -> okResult());
+        binding.btnCancel.setOnClickListener(view -> cancelResult());
+    }
+
+    public void getIntentData() {
+        if (getIntent() != null) {
+            requiredLocation = getIntent().getParcelableExtra(AppConstants.ADDRESS);
+        }
+
+        if (requiredLocation == null) {
+            requiredLocation = new com.sujit.zomatoapidemo.data.models.Location();
+        }else {
+            binding.etCity.setText(requiredLocation.getAddress());
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -81,7 +95,7 @@ public class LocationActivity extends AppCompatActivity {
                         .setMessage(R.string.location_tittle)
                         .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
                             dialogInterface.dismiss();
-                            navigateLocationActivity();
+                            navigateLocationSettingsActivity();
                         })
                         .setNegativeButton(R.string.cancel, (dialogInterface, i) -> dialogInterface.dismiss())
                         .setCancelable(false);
@@ -92,7 +106,7 @@ public class LocationActivity extends AppCompatActivity {
         }
     }
 
-    private void navigateLocationActivity() {
+    private void navigateLocationSettingsActivity() {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         startActivityForResult(intent, 100);
     }
@@ -196,5 +210,31 @@ public class LocationActivity extends AppCompatActivity {
         if (mFusedLocationClient != null && mLocationCallback != null) {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
         }
+    }
+
+
+    public void cancelResult() {
+        Intent responseIntent = new Intent();
+        setResult(RESULT_CANCELED, responseIntent);
+        finish();
+    }
+
+    public void okResult() {
+        Intent responseIntent = new Intent();
+        if (TextUtils.isEmpty(binding.etCity.getText())) {
+            Toast.makeText(this, R.string.enter_location, Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            String address = String.valueOf(binding.etCity.getText());
+            if (address.equalsIgnoreCase(requiredLocation.getAddress())) {
+                responseIntent.putExtra(AppConstants.ADDRESS, requiredLocation); // with lat lan
+
+            } else {
+                com.sujit.zomatoapidemo.data.models.Location location = new com.sujit.zomatoapidemo.data.models.Location(address);
+                responseIntent.putExtra(AppConstants.ADDRESS, location); // w/o lat lan
+            }
+        }
+        setResult(RESULT_OK, responseIntent);
+        finish();
     }
 }

@@ -125,7 +125,11 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
 
             binding.tvRestaurantName.setText(restaurant.getRestaurant().getName());
-            binding.tvRestaurantRating.setText(restaurant.getRestaurant().getUserRating().getAggregateRating());
+            if (restaurant.getRestaurant().getUserRating().getAggregateRating().equalsIgnoreCase("0")){
+                binding.tvRestaurantRating.setText(context.getString(R.string.new_restaurant));
+            }else {
+                binding.tvRestaurantRating.setText(restaurant.getRestaurant().getUserRating().getAggregateRating());
+            }
             binding.tvRestaurantMenu.setText(restaurant.getRestaurant().getCuisines());
             binding.tvRestaurantPrice.setText(String.format(context.getString(R.string.cost_for_two), restaurant.getRestaurant().getCurrency().concat(String.valueOf(restaurant.getRestaurant().getAverageCostForTwo()))));
             binding.cvRestaurant.setOnClickListener(view -> {
@@ -147,6 +151,10 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         void configureViews() {
             if (isAllItemLoaded) {
+                itemView.setVisibility(View.VISIBLE);
+            } else if (restaurantList.size() == 0) {
+                itemView.setVisibility(View.GONE);
+            }else {
                 itemView.setVisibility(View.VISIBLE);
             }
         }

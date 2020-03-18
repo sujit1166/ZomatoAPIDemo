@@ -40,6 +40,10 @@ public class Location implements Parcelable {
     public Location() {
     }
 
+    public Location(String address) {
+        this.address = address;
+    }
+
     protected Location(Parcel in) {
         address = in.readString();
         locality = in.readString();
