@@ -23,6 +23,14 @@ android {
             buildConfigField "String", "TOKEN", "\"4feaa2167c4dc6beadf629319423bd4b\""
         }
     }
+
+    dataBinding {
+        enabled true
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 }
 
 dependencies {
