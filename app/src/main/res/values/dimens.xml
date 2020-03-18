@@ -43,4 +43,5 @@
     <dimen name="image_icon_height_width">40dp</dimen>
     <dimen name="restaurant_item_height">120dp</dimen>
     <dimen name="toolbar_height">48dp</dimen>
+    <dimen name="item_divider_height">0.5dp</dimen>
 </resources>

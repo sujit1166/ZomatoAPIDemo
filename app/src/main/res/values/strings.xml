@@ -5,4 +5,13 @@
     <string name="something_went_wrong">Something went wrong</string>
     <string name="cost_for_two">Cost for two <b>%s</b> approx</string>
     <string name="restaurant_nearby">Restaurants Nearby</string>
+    <string name="detectLocation">Detect Location</string>
+    <string name="auto_detect_location">Auto detect current location</string>
+    <string name="hint_city">Dadar</string>
+    <string name="city_region">City/Region</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">ok</string>
+    <string name="location_tittle">Please turn on loaction to get your current city</string>
+    <string name="location_required">Location Required !</string>
+    <string name="try_again">Please try again</string>
 </resources>

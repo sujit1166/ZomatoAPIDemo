@@ -1,9 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.location.LocationActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <data class="LocationDetectionActivity" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:background="@color/colorPrimary"
+            android:padding="0dp"
+            android:paddingRight="0dp"
+            app:contentInsetEnd="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:contentPadding="0dp"
+            app:contentPaddingRight="0dp"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:titleMarginStart="0dp">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxEms="15"
+                android:text="@string/detectLocation"
+                android:textColor="@color/white" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/tvAutoDetect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="@color/white"
+                android:drawableStart="@drawable/ic_my_location_black_24dp"
+                android:drawableLeft="@drawable/ic_my_location_black_24dp"
+                android:drawablePadding="@dimen/margin_xlarge_16"
+                android:drawableTint="@color/colorAccent"
+                android:gravity="center_vertical"
+                android:padding="@dimen/padding_xlarge_16"
+                android:text="@string/auto_detect_location"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_large_14" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_divider_height"
+                android:layout_below="@+id/tvAutoDetect"
+                android:background="@color/graylight" />
+
+            <TextView
+                android:id="@+id/tvCityLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvAutoDetect"
+                android:layout_marginLeft="@dimen/margin_xlarge_16"
+                android:layout_marginTop="@dimen/font_xxxxxlarge_30"
+                android:layout_marginRight="@dimen/margin_xlarge_16"
+                android:text="@string/city_region"
+                android:textSize="@dimen/font_medium_12" />
+
+            <EditText
+                android:id="@+id/etCity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvCityLabel"
+                android:layout_marginLeft="@dimen/margin_xlarge_16"
+                android:layout_marginRight="@dimen/margin_xlarge_16"
+                android:hint="@string/hint_city"
+                android:inputType="text"
+                android:textColorHint="@color/graylight"
+                android:textSize="@dimen/font_large_14" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etCity"
+                android:layout_marginTop="@dimen/margin_xlarge_16"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnCancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_xlarge_16"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_negative"
+                    android:text="@string/cancel"
+                    android:textColor="@color/colorPrimary" />
+
+                <Button
+                    android:id="@+id/btnOK"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_xlarge_16"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_positive"
+                    android:text="@string/ok"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/graylight"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
+    </LinearLayout>
+</layout>

@@ -36,6 +36,10 @@ public class Location implements Parcelable {
     @Expose
     private String localityVerbose;
 
+
+    public Location() {
+    }
+
     protected Location(Parcel in) {
         address = in.readString();
         locality = in.readString();
