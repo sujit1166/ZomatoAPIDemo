@@ -31,4 +31,13 @@ public class DataSource {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    public Observable<Resource<ZomatoResponse>> getRestraurants(double lat, double lon, int currentPage) {
+        return apiService.getRestaurantsByLocation(lat, lon, currentPage)
+                .flatMap(response -> Observable.just(response.isSuccessful()
+                        ? Resource.success(response.body())
+                        : Resource.error("", new ZomatoResponse())))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

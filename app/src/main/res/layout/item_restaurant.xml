@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="RestaurantItemBinding" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvRestaurant"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_small_10"
+        android:layout_marginTop="@dimen/margin_xxsmall_5"
+        android:layout_marginRight="@dimen/margin_small_10"
+        android:layout_marginBottom="@dimen/margin_xxsmall_5"
+        android:background="@color/white"
+        android:elevation="@dimen/card_view_elevation"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/card_view_corner_radius"
+        app:cardElevation="@dimen/card_view_elevation">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/restaurant_item_height"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/ivRestaurantMenu"
+                android:layout_width="@dimen/restaurant_item_height"
+                android:layout_height="match_parent"
+                tools:src="@drawable/placeholder_food" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/padding_small_10"
+                android:layout_toRightOf="@+id/ivRestaurantMenu"
+                android:paddingTop="@dimen/margin_medium_12"
+                android:paddingBottom="@dimen/margin_medium_12">
+
+                <TextView
+                    android:id="@+id/tvRestaurantName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/margin_small_10"
+                    android:layout_toLeftOf="@+id/tvRestaurantRating"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/dark_text"
+                    android:textSize="@dimen/font_xlarge_16"
+                    android:textStyle="bold"
+                    tools:text="MacDonalds" />
+
+                <TextView
+                    android:id="@+id/tvRestaurantRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/margin_small_10"
+                    android:background="@color/green"
+                    android:maxLines="1"
+                    android:paddingTop="3dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingBottom="3dp"
+                    tools:text="3.6"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_medium_12"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvRestaurantMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvRestaurantName"
+                    android:layout_marginTop="@dimen/margin_xxsmall_5"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/extra_light_text"
+                    android:textSize="@dimen/font_medium_12"
+                    tools:text="Pizza,Burger" />
+
+                <TextView
+                    android:id="@+id/tvRestaurantPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="@color/general_text"
+                    android:textSize="@dimen/font_small_10"
+                    tools:text="TextView" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

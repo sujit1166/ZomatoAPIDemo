@@ -14,4 +14,8 @@ public interface APIService {
     Observable<Response<ZomatoResponse>> getRestaurantsByName(@Query("q") String queryParams,
                                                               @Query("start") int currentPage);
 
+    @GET("search")
+    Observable<Response<ZomatoResponse>> getRestaurantsByLocation(@Query("lat") Double latitude,
+                                                                  @Query("lon") Double longitude,
+                                                                  @Query("start") int currentPage);
 }

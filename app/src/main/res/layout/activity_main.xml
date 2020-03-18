@@ -1,25 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data class="HomeActivityBinding" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.home.HomeActivity">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/btnFetchApi"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/rlHeader"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:layout_marginLeft="@dimen/margin_xlarge_16"
+            android:layout_marginRight="@dimen/margin_xlarge_16">
+
+            <ImageView
+                android:id="@+id/ivLocation"
+                android:layout_width="@dimen/image_icon_height_width"
+                android:layout_height="@dimen/image_icon_height_width"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/margin_xxsmall_5"
+                android:src="@drawable/ic_location_on_black_24dp"
+                android:tint="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/tvCurrentLocation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/margin_small_10"
+                android:layout_toLeftOf="@+id/ivProfile"
+                android:layout_toRightOf="@+id/ivLocation"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="Dadar"
+                android:textAllCaps="true"
+                android:textColor="@color/general_text"
+                android:textSize="@dimen/font_large_14"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="@dimen/image_icon_height_width"
+                android:layout_height="@dimen/image_icon_height_width"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/margin_xxsmall_5"
+                android:src="@drawable/ic_account_circle_black_24dp"
+                android:tint="@color/colorAccent" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/graylight" />
+
+        </RelativeLayout>
+
+        <include
+            android:id="@+id/view_loader"
+            layout="@layout/view_loader" />
+
+        <include
+            android:id="@+id/view_empty"
+            layout="@layout/view_empty" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRestaurant"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="fetchApi"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_below="@+id/rlHeader"
+            android:layout_marginTop="@dimen/margin_small_10"
+            android:overScrollMode="never" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </layout>

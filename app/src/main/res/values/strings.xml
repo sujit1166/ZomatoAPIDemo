@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ZomatoAPIDemo</string>
+    <string name="back_press_msg">Please click BACK again to exit</string>
+    <string name="empty_text">No data found</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="cost_for_two">Cost for two <b>%s</b> approx</string>
+    <string name="restaurant_nearby">Restaurants Nearby</string>
 </resources>
