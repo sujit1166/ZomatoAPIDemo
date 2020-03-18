@@ -12,6 +12,7 @@ import com.sujit.zomatoapidemo.data.models.Restaurant;
 import com.sujit.zomatoapidemo.databinding.HomeActivityBinding;
 import com.sujit.zomatoapidemo.ui.location.LocationActivity;
 import com.sujit.zomatoapidemo.utils.AppConstants;
+import com.sujit.zomatoapidemo.utils.NetworkUtils;
 import com.sujit.zomatoapidemo.utils.RecyclerViewScrollListener;
 
 import java.util.List;
@@ -67,7 +68,11 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void loadMore() {
-                viewModel.fetchRestraurant();
+                if (NetworkUtils.isNetworkOnline(HomeActivity.this)) {
+                    viewModel.fetchRestraurant();
+                } else {
+                    Toast.makeText(HomeActivity.this, R.string.please_turn_on_internet, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -106,11 +111,15 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void fetchRestraurantsData() {
-        Log.e(TAG, "fetchRestraurantsData: ");
-        hideList();
-        showProgress();
-        restaurantAdapter.refreshItems();
-        viewModel.fetchRestraurant();
+        if (NetworkUtils.isNetworkOnline(HomeActivity.this)) {
+            hideList();
+            showProgress();
+            restaurantAdapter.refreshItems();
+            viewModel.fetchRestraurant();
+        } else {
+            showEmptyView();
+            Toast.makeText(HomeActivity.this, R.string.please_turn_on_internet, Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -176,7 +185,6 @@ public class HomeActivity extends AppCompatActivity {
                 if (data != null) {
                     viewModel.setLocation(data.getParcelableExtra(AppConstants.ADDRESS));
                     binding.tvCurrentLocation.setText(viewModel.getLocation().getAddress());
-                    Log.e(TAG, "onActivityResult: ");
                     fetchRestraurantsData();
                 }
             } else if (resultCode == RESULT_CANCELED) {
